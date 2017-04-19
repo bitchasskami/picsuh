@@ -1,5 +1,5 @@
 <div class="container">
-    <form action="" method="post" enctype="application/x-www-form-urlencoded">
+    <form action="/user/doLogin" method="post" enctype="application/x-www-form-urlencoded">
         <div class="form-group">
             <input type="email" class="form-control" name="email" placeholder="Email" required><br><br>
         </div>
