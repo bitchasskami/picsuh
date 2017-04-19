@@ -14,10 +14,14 @@
             <ul class="nav navbar-nav">
                 <li><a href="/user">User</a></li>
                 <li><a href="/gallery">Gallery</a></li>
-            </ul>
-            <ul class="nav navbar-nav navbar-right">
-                <li><a href="/user/registration"><span class="glyphicon glyphicon-user"></span> Sign Up</a></li>
-                <li><a href="/user/login"><span class="glyphicon glyphicon-log-in"></span> Login</a></li>
+                <li><a href="#">
+                        <?php
+                        if(!empty($_SESSION['user']))echo $_SESSION['user'];
+                        echo '</a></li></ul><ul class="nav navbar-nav navbar-right">';
+
+                        if(empty($_SESSION['user'])) echo '<li><a href="/user/registration"><span class="glyphicon glyphicon-user"></span> Sign Up</a></li><li><a href="/user/login"><span class="glyphicon glyphicon-log-in"></span> Login</a></li>';
+                        else echo '<li><a href="/user/doLogout"><span class="glyphicon glyphicon-off"></span> Logout</a>';
+                        ?>
             </ul>
         </div>
     </nav>

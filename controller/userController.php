@@ -12,13 +12,33 @@ class userController
     }
 
     public function login(){
-        $view = new VIew('login_index');
+        $view = new View('login_index');
         $view->display();
     }
 
     public function doLogin(){
         require_once '../lib/connectionhandler.php';
         connectionhandler::connect();
+
+        if(isset($_POST['login'])){
+            $email = $_POST['email'];
+            $password = sha1($_POST['password']);
+
+            $query = "select * from user where email = ?";
+            $statement = connectionhandler::connect()->prepare($query);
+            $statement->bind_param('s', $email);
+            $statement->execute();
+
+            $result = $statement->get_result();
+            $user = $result->fetch_object();
+
+            if($password == $user->password){
+                session_start();
+                $_SESSION['user'] = $user->username;
+                header('Location: /');
+            }
+            else echo 'Password or Email incorrect';
+        }
     }
 
     public function doRegistration(){
@@ -45,9 +65,17 @@ class userController
                 if (!$statement->execute()) {
                     throw new Exception($statement->error);
                 }
-
-                header('Location: /user');
+                else{
+                    header('Location: /user/login');
+                    //doLogin();
+                }
             }
         }
+    }
+
+    public function doLogout(){
+        unset($_SESSION['user']);
+        session_destroy();
+        header('Location: /');
     }
 }
