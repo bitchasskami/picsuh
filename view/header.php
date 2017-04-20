@@ -19,10 +19,9 @@
             <ul class="nav navbar-nav">
                 <li><a href="/user">User</a></li>
                 <li><a href="/gallery">Gallery</a></li>
-                <li><a href="#">NightMode</a></li>
-                <li><a href="#">
+                <li><a href="/user">
                         <?php
-                        if(!empty($_SESSION['user']))echo $_SESSION['user'];
+                        if(!empty($_SESSION['user']))echo $_SESSION['user']->username;
                         echo '</a></li></ul><ul class="nav navbar-nav navbar-right">';
 
                         if(empty($_SESSION['user'])) echo '<li><a href="/user/registration"><span class="glyphicon glyphicon-user"></span> Sign Up</a></li><li><a href="/user/login"><span class="glyphicon glyphicon-log-in"></span> Login</a></li>';

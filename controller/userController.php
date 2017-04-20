@@ -34,10 +34,12 @@ class userController
 
             if($password == $user->password){
                 session_start();
-                $_SESSION['user'] = $user->username;
+                $_SESSION['user'] = $user;
                 header('Location: /');
             }
-            else echo 'Password or Email incorrect';
+            else {
+                echo 'Password or Email incorrect';
+            }
         }
     }
 
@@ -55,20 +57,29 @@ class userController
                 echo 'Passwords do not match.';
             }
             else{
-                $password = sha1($password);
-
-                $query = "Insert into user (email, username, password) values (?,?,?);";
-
+                $query = "select * from user where email = ?";
                 $statement = connectionhandler::connect()->prepare($query);
-                $statement->bind_param('sss', $email, $username, $password);
+                $statement->bind_param('s', $email);
+                $statement->execute();
 
-                if (!$statement->execute()) {
-                    throw new Exception($statement->error);
+                $result = $statement->get_result();
+                if ($result->num_rows == 0) {
+
+                    $password = sha1($password);
+
+                    $query = "Insert into user (email, username, password) values (?,?,?);";
+
+                    $statement = connectionhandler::connect()->prepare($query);
+                    $statement->bind_param('sss', $email, $username, $password);
+
+                    if (!$statement->execute()) {
+                        throw new Exception($statement->error);
+                    } else {
+                        header('Location: /user/login');
+                        //doLogin();
+                    }
                 }
-                else{
-                    header('Location: /user/login');
-                    //doLogin();
-                }
+                else echo 'This Email has already been registered';
             }
         }
     }
@@ -77,5 +88,55 @@ class userController
         unset($_SESSION['user']);
         session_destroy();
         header('Location: /');
+    }
+
+    public function doDelete(){
+        require_once '../lib/connectionhandler.php';
+        connectionhandler::connect();
+
+        $email = $_SESSION['user']->email;
+
+        var_dump($email);
+
+        $query = "delete from user where email = ?";
+        $statement = connectionhandler::connect()->prepare($query);
+        $statement->bind_param('s', $email);
+        $statement->execute();
+
+        $this->doLogout();
+    }
+
+    public function doAlter(){
+        require_once '../lib/connectionhandler.php';
+        connectionhandler::connect();
+        $email = $_SESSION['user']->email;
+
+        if(isset($_POST['alterusrnm'])){
+            $username = $_POST['username'];
+
+            $query = "update user set username = ? where email = ?";
+            $statement = connectionhandler::connect()->prepare($query);
+            $statement->bind_param('ss', $username,$email);
+            $statement->execute();
+        }
+        else{
+            if($_POST['password'] == $_POST['passwordrep']) {
+
+                $password = sha1($_POST['password']);
+
+                $query = "update user set password = ? where email = ?";
+                $statement = connectionhandler::connect()->prepare($query);
+                $statement->bind_param('ss', $password, $email);
+                $statement->execute();
+            }
+            else echo 'Passwords do not match';
+
+        }
+        if (!$statement->execute()) {
+            throw new Exception($statement->error);
+        } else {
+            $this->doLogout();
+            header('Location: /user/login');
+        }
     }
 }
