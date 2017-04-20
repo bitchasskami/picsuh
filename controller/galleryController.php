@@ -34,5 +34,10 @@ class galleryController
 
         imagejpeg($nm, 'data/thumbs/' . $filename);
     }
+
+    public function blur() {
+        echo '<div class = "blurredbackground">';
+        echo '</div>';
+}
 }
 ?>

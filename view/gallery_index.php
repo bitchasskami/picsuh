@@ -30,7 +30,21 @@ if(isset($_FILES['image'])){
 }
 ?>
 <html>
+
 <body>
+<script>
+    $(document).ready(function(){
+        $('.img-link').click(function(e) {
+
+            var imgSrc = $(this).children('img').attr('src');
+            $('#bg').addClass('blurredbackground');
+            //$('#bg').css('background-image', 'url('+imgSrc+')');
+
+            e.preventDefault();
+        });
+    });
+</script>
+<div id="bg" class="unblurredbackground">
 
 <?php
 $dir = 'data/thumbs/';
@@ -44,7 +58,9 @@ if ( file_exists( $dir ) == false ) {
     foreach ( $dir_contents as $file ) {
         $file_type = strtolower( end( explode('.', $file ) ) );
         if ( ($file !== '.') && ($file !== '..') && (in_array( $file_type, $file_display)) ) {
-            echo '<img src="'. $dir . '/' . $file.'" alt="', $file, '"/>';
+            echo '<div class="img-thumbnail">';
+            echo '<a href="" class="img-link" ><img src="'. $dir . '/' . $file.'" alt="', $file, '"/></a>';
+            echo '</div>';
         }
     }
 }
@@ -62,6 +78,7 @@ if ( file_exists( $dir ) == false ) {
 
 </form>
 
+</div>
 </body>
 </html>
 
