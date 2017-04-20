@@ -19,7 +19,7 @@ class galleryController
         $ox = imagesx($im);
         $oy = imagesy($im);
 
-        $nx = 150;
+        $nx = 250;
         $ny = floor($oy * ($nx / $ox));
 
         $nm = imagecreatetruecolor($nx, $ny);
@@ -35,9 +35,37 @@ class galleryController
         imagejpeg($nm, 'data/thumbs/' . $filename);
     }
 
-    public function blur() {
-        echo '<div class = "blurredbackground">';
-        echo '</div>';
-}
+    public function upload(){
+        if(isset($_FILES['image'])){
+
+            $errors= array();
+            $file_name = $_FILES['image']['name'];
+            $file_size = $_FILES['image']['size'];
+            $file_tmp = $_FILES['image']['tmp_name'];
+            $file_type = $_FILES['image']['type'];
+            $file_ext=strtolower(end(explode('.',$_FILES['image']['name'])));
+
+            $expensions= array("jpeg","jpg","png");
+
+            if(in_array($file_ext,$expensions)=== false){
+                $errors[]="extension not allowed, please choose a JPEG or PNG file.";
+            }
+
+            if($file_size > 2097152) {
+                $errors[]='File size must be excately 2 MB';
+            }
+
+            if(empty($errors)==true) {
+                $gallery = new galleryController();
+                move_uploaded_file($file_tmp,"data/".$file_name);
+                if (file_exists('data/$file_name') == false ) {
+                    $gallery->createThumbnail($file_name);
+                }
+            } else {
+                print_r($errors);
+            }
+            header('Location: /gallery');
+        }
+    }
 }
 ?>
