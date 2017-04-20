@@ -26,9 +26,11 @@ if ( file_exists( $dir ) == false ) {
             echo '<a data-fancybox="gallery" href="data/'.$file.'">';
             echo '<img src="'. $dir . '/' . $file.'" alt="', $file , '" />';
             echo '</a>';
+            echo '<h3>Image Title</h3>';
+            echo '<p>The caption lololololol.</p>';
             echo '</div>';
-            echo '<p class="caption">The caption lololololol.</p>';
             echo '</div>';
+            // TODO Diashow
         }
     }
 }
