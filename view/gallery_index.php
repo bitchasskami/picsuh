@@ -10,7 +10,7 @@ connectionhandler::connect();
 
     <div class="panel panel-default">
         <div class="panel-body">
-        <form id="flexer" action = "/gallery/upload" method = "POST" enctype = "multipart/form-data">
+        <form id="flexer" action = "/picture/upload" method = "POST" enctype = "multipart/form-data">
             <input type = "file" name = "image" />
             <input type = "text" name = "title" required />
             <textarea name = "desc" required></textarea>

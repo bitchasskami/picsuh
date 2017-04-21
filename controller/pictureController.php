@@ -61,8 +61,6 @@ class pictureController
             }
 
             if($error == "true") {
-
-                $gallery = new galleryController();
                 move_uploaded_file($file_tmp,"data/".$file_name);
 
                 $query = "insert into picture (gallery_id, filename, name, description) values (?, ?, ?, ?);";
@@ -76,13 +74,13 @@ class pictureController
                     header('Location: /gallery');
                 }
                 if (file_exists('data/$file_name') == false ) {
-                    $gallery->createThumbnail($file_name);
+                    $this->createThumbnail($file_name);
                 }
 
             } else {
                 echo '<p>$error</p>';
             }
-            header('Location: /gallery');
+            header('Location: /picture');
         }
 
 
