@@ -30,7 +30,7 @@ CREATE TABLE `gallery` (
   `id` int(6) NOT NULL,
   `user_id` int(6) NOT NULL,
   `name` varchar(50) NOT NULL,
-  `description` varchar(50) DEFAULT NULL
+  `description` varchar(150) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 -- --------------------------------------------------------

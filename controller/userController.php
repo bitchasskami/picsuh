@@ -49,7 +49,7 @@ class userController
 
         if (isset($_POST['reg'])) {
             $email = $_POST['email'];
-            $username = $_POST['username'];
+            $username = htmlentities($_POST['username']);
             $password = $_POST['password'];
             $passwordrep = $_POST['passwordrep'];
 
@@ -112,7 +112,7 @@ class userController
         $email = $_SESSION['user']->email;
 
         if(isset($_POST['alterusrnm'])){
-            $username = $_POST['username'];
+            $username = htmlentities($_POST['username']);
 
             $query = "update user set username = ? where email = ?";
             $statement = connectionhandler::connect()->prepare($query);
