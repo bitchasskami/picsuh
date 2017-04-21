@@ -20,7 +20,7 @@
             </div>
             <ul class="nav navbar-nav">
                 <li><a href="/user">User</a></li>
-                <li><a href="/gallery">Gallery</a></li>
+                <li><a href="/picture">Gallery</a></li>
                         <?php
                         if(!empty($_SESSION['user'])) {
                             echo '<li><a href="/user">'. $_SESSION['user']->username .'</a></li>';
