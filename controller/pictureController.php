@@ -1,5 +1,5 @@
 <?php
-class galleryController
+class pictureController
 {
     public function index()
     {
