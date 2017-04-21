@@ -7,7 +7,7 @@ if(empty($_SESSION['user'])) header('Location: /user/login');
         <?php
         $galleryob = $_SESSION['galleries'];
         foreach ($galleryob as $gallery){
-            echo '<li class="list-group-item"><a href="/picture?id='. $gallery->id .'">'. $gallery->name .'</a></li>';
+            echo '<li class="list-group-item"><a href="/picture?id='. $gallery->id .'&name='. $gallery->name .'">'. $gallery->name .'</a></li>';
         }
         ?>
         <a href="/default/create"><li class="list-group-item"><span class="glyphicon glyphicon-plus"></span> Create New Gallery</li></a>

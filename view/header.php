@@ -20,9 +20,12 @@
             </div>
             <ul class="nav navbar-nav">
                 <li><a href="/user">User</a></li>
-                <li><a href="/picture">Gallery</a></li>
                         <?php
+                        if(!empty($_GET['name'])) $_SESSION['name'] = $_GET['name'];
+
                         if(!empty($_SESSION['user'])) {
+                            if(!empty($_SESSION['name'])) echo '<li><a href="/picture">Selected Gallery: '.$_SESSION['name'].'</a></li>';
+                            else echo '<li><a href="/">Gallery</a></li>';
                             echo '<li><a href="/user">'. $_SESSION['user']->username .'</a></li>';
                         }
 

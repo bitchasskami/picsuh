@@ -38,9 +38,9 @@ if ( file_exists( $dir ) == false ) {
 
     foreach ( $dir_contents as $file ) {
 
-        $query = "select name, description from picture where gallery_id = ?";
+        $query = "select name, description from picture where gallery_id = ? AND filename = ?";
         $statement = connectionhandler::connect()->prepare($query);
-        $statement->bind_param('s', $gallery_id);
+        $statement->bind_param('ss', $gallery_id, $file);
         $statement->execute();
 
         $result = $statement->get_result();
