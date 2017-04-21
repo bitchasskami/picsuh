@@ -46,13 +46,13 @@ class galleryController
             $file_tmp = $_FILES['image']['tmp_name'];
             $file_ext=strtolower(end(explode('.',$_FILES['image']['name'])));
 
-            $expensions= array("jpeg","jpg","png", "gif");
+            $extension= array("jpeg","jpg","png", "gif");
 
             $title = $_POST['title'];
             $desc = $_POST['desc'];
             $galleryid = 2;
 
-            if(in_array($file_ext,$extensions)=== false){
+            if(in_array($file_ext,$extension)=== false){
                 $error = "extension not allowed, please choose a JPEG or PNG file.";
             } else if($file_size > 8388608) {
                 $error = "File size must be less than 8 MB";

@@ -7,7 +7,21 @@ connectionhandler::connect();
 <body>
 
 <div class="container">
+
+    <div class="panel panel-default">
+        <div class="panel-body">
+        <form id="flexer" action = "/gallery/upload" method = "POST" enctype = "multipart/form-data">
+            <input type = "file" name = "image" />
+            <input type = "text" name = "title" required />
+            <textarea name = "desc" required></textarea>
+            <input type = "submit"/>
+        </form>
+        </div>
+    </div>
+
     <div class=""row">
+
+
 
 <?php
 $dir = 'data/thumbs/';
@@ -50,16 +64,6 @@ if ( file_exists( $dir ) == false ) {
     }
 }
 ?>
-
-<form action = "/gallery/upload" method = "POST" enctype = "multipart/form-data">
-    <label class="btn btn-default btn-file">
-    <input type = "file" name = "image" />
-    </label>
-    <input type = "text" name = "title" required />
-    <textarea name = "desc" required></textarea>
-    <input type = "submit"/>
-
-</form>
 </div>
 </div>
 </body>
