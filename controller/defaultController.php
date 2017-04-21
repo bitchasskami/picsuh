@@ -14,7 +14,9 @@ class DefaultController{
         $result = $statement->get_result();
 
         while ($entry = $result->fetch_object()){
-            $a[] = $entry;
+            if ($_SESSION['user']->id == $entry->user_id){
+                $a[] = $entry;
+            }
         }
 
         $_SESSION['galleries'] = $a;
