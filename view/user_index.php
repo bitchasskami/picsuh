@@ -19,8 +19,7 @@ if(isset($_SESSION['user'])) {
                 </div>
                 <button name="alterpw" type="submit" class="btn btn-default">Change</button>
             </form>
-        </div>
-    ';
+        </div>';
     echo '<a href="/user/doDelete">Delete Account</a>';
 }
     else header('Location: /user/login');

@@ -32,13 +32,9 @@ class userController
             $result = $statement->get_result();
             $user = $result->fetch_object();
 
-            if($password == $user->password){
                 session_start();
                 $_SESSION['user'] = $user;
                 header('Location: /');
-            }
-            else {
-                echo 'Password or Email incorrect';
             }
         }
     }
@@ -79,7 +75,6 @@ class userController
                         //doLogin();
                     }
                 }
-                else echo 'This Email has already been registered';
             }
         }
     }

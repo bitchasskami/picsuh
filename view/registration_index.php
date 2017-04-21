@@ -6,7 +6,11 @@ if(isset($_POST['password']) && isset($_POST['passwordrep'])) {
         $message = '<div class="alert alert-danger">The passwords do not match!</div>';
     } else {
         $registration = new userController();
-        $registration->doRegistration();
+        if(!$registration->doRegistration()) {
+            $message = '<div class="alert alert-danger">This E-Mail is already registered.</div>';
+        } else {
+            $registration->doRegistration();
+        }
     }
 }
 ?>
@@ -22,7 +26,7 @@ if(isset($_POST['password']) && isset($_POST['passwordrep'])) {
             <input type="password" id="password" class="form-control" name="password" placeholder="Password max 50 Chars" maxlength="50" required><br><br>
         </div>
         <div class="form-group">
-            <input type="password" id="passwordrep" class="form-control" name="passwordrep" placeholder="Rewrite Password max 50 Chars" maxlength="50" required><br><br>
+            <input type="password" id="passwordrep" class="form-control" name="passwordrep" placeholder="Rewrite Password max 50 Chars" maxlength="50" required>
             <?php echo $message; ?>
         </div>
         <button name="reg" type="submit" class="btn btn-default">Submit</button>
