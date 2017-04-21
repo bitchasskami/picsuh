@@ -19,6 +19,7 @@ class userController
     public function doLogin(){
         require_once '../lib/connectionhandler.php';
         connectionhandler::connect();
+        $message = "";
 
         if(isset($_POST['login'])){
             $email = $_POST['email'];
@@ -32,9 +33,17 @@ class userController
             $result = $statement->get_result();
             $user = $result->fetch_object();
 
+            if($password == @$user->password){
                 session_start();
                 $_SESSION['user'] = $user;
                 header('Location: /');
+            } else {
+                $message = '<div class="alert alert-danger">E-Mail / Password combination is not correct.</div>';
+
+                $view = new View('login_index');
+                $view->message = $message;
+                $view->submittedemail = $email;
+                $view->display();
             }
         }
     }
@@ -71,6 +80,7 @@ class userController
                     if (!$statement->execute()) {
                         throw new Exception($statement->error);
                     } else {
+                        $message = '<div class="alert alert-danger">This E-Mail is already registered.</div>';
                         header('Location: /user/login');
                         //doLogin();
                     }
