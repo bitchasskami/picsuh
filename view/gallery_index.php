@@ -1,6 +1,8 @@
 <?php
 require_once '../lib/connectionhandler.php';
 connectionhandler::connect();
+
+if(!empty($_GET['id'])) $_SESSION['id'] = $_GET['id'];
 ?>
 <html>
 
@@ -11,9 +13,9 @@ connectionhandler::connect();
     <div class="panel panel-default">
         <div class="panel-body">
         <form id="flexer" action = "/picture/upload" method = "POST" enctype = "multipart/form-data">
-            <input type = "file" name = "image" />
-            <input type = "text" name = "title" required />
-            <textarea name = "desc" required></textarea>
+            <input type = "file" name = "image" required />
+            <input  class="form-control" type = "text" name = "title" placeholder="Name max 50 Chars" required />
+            <textarea class="form-control" name = "desc" placeholder="Description max 150 Chars" required></textarea>
             <input type = "submit"/>
         </form>
         </div>
@@ -24,19 +26,21 @@ connectionhandler::connect();
 
 
 <?php
-$dir = 'data/thumbs/';
+$gallery_id = 2;
+if(!empty($_SESSION['id'])) $gallery_id = $_SESSION['id'];
+$dir = 'data/'.$gallery_id.'/thumbs/';
 $file_display = array('jpg', 'jpeg', 'png', 'gif');
 
 if ( file_exists( $dir ) == false ) {
-    echo 'Directory \'', $dir, '\' not found!';
+    echo 'Hoops! No pictures found';
 } else {
     $dir_contents = scandir( $dir );
 
     foreach ( $dir_contents as $file ) {
 
-        $query = "select name, description from picture where filename = ?";
+        $query = "select name, description from picture where gallery_id = ?";
         $statement = connectionhandler::connect()->prepare($query);
-        $statement->bind_param('s', $file);
+        $statement->bind_param('s', $gallery_id);
         $statement->execute();
 
         $result = $statement->get_result();
@@ -52,7 +56,7 @@ if ( file_exists( $dir ) == false ) {
         if ( ($file !== '.') && ($file !== '..') && (in_array( $file_type, $file_display)) ) {
             echo '<div class="col-md-3">';
             echo '<div class="thumbnail">';
-            echo '<a data-fancybox="gallery" href="data/'.$file.'">';
+            echo '<a data-fancybox="gallery" href="data/'.$gallery_id.'/'.$file.'">';
             echo '<img src="'. $dir . '/' . $file.'" alt="', $file , '" />';
             echo '</a>';
             echo '<h4>' . $title . '</h4>';

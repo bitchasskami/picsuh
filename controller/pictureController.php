@@ -8,12 +8,16 @@ class pictureController
     }
 
     function createThumbnail($filename) {
+
+        $gallery_id = 2;
+        if(!empty($_SESSION['id'])) $gallery_id = $_SESSION['id'];
+
         if(preg_match('/[.](jpg)$/', $filename)) {
-            $im = imagecreatefromjpeg('data/' . $filename);
+            $im = imagecreatefromjpeg('data/'.$gallery_id.'/' . $filename);
         } else if (preg_match('/[.](gif)$/', $filename)) {
-            $im = imagecreatefromgif('data/' . $filename);
+            $im = imagecreatefromgif('data/'.$gallery_id.'/' . $filename);
         } else if (preg_match('/[.](png)$/', $filename)) {
-            $im = imagecreatefrompng('data/' . $filename);
+            $im = imagecreatefrompng('data/'.$gallery_id.'/' . $filename);
         }
 
         $ox = imagesx($im);
@@ -26,13 +30,13 @@ class pictureController
 
         imagecopyresized($nm, $im, 0,0,0,0,$nx,$ny,$ox,$oy);
 
-        if(!file_exists('data/thumbs')) {
-            if(!mkdir('data/thumbs')) {
+        if(!file_exists('data/'.$gallery_id.'/thumbs')) {
+            if(!mkdir('data/'.$gallery_id.'/thumbs')) {
                 die("There was a problem. Please try again!");
             }
         }
 
-        imagejpeg($nm, 'data/thumbs/' . $filename);
+        imagejpeg($nm, 'data/'.$gallery_id.'/thumbs/' . $filename);
     }
 
     public function upload(){
@@ -50,7 +54,9 @@ class pictureController
 
             $title = $_POST['title'];
             $desc = $_POST['desc'];
-            $galleryid = 2;
+            $gallery_id = 2;
+            if(!empty($_SESSION['id'])) $gallery_id = $_SESSION['id'];
+
 
             if(in_array($file_ext,$extension)=== false){
                 $error = "extension not allowed, please choose a JPEG or PNG file.";
@@ -61,17 +67,17 @@ class pictureController
             }
 
             if($error == "true") {
-                move_uploaded_file($file_tmp,"data/".$file_name);
+                move_uploaded_file($file_tmp,"data/".$gallery_id."/".$file_name);
 
                 $query = "insert into picture (gallery_id, filename, name, description) values (?, ?, ?, ?);";
 
                 $statement = connectionhandler::connect()->prepare($query);
-                $statement->bind_param('ssss', $galleryid, $file_name, $title, $desc);
+                $statement->bind_param('ssss', $gallery_id, $file_name, $title, $desc);
 
                 if (!$statement->execute()) {
                     throw new Exception($statement->error);
                 } else {
-                    header('Location: /gallery');
+                    header('Location: /picture');
                 }
                 if (file_exists('data/$file_name') == false ) {
                     $this->createThumbnail($file_name);
@@ -82,11 +88,5 @@ class pictureController
             }
             header('Location: /picture');
         }
-
-
-    }
-    public function deletepicture() {
-
     }
 }
-?>
