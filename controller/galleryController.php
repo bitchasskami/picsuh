@@ -36,36 +36,59 @@ class galleryController
     }
 
     public function upload(){
+        require_once '../lib/connectionhandler.php';
+        connectionhandler::connect();
+
         if(isset($_FILES['image'])){
 
-            $errors= array();
             $file_name = $_FILES['image']['name'];
             $file_size = $_FILES['image']['size'];
             $file_tmp = $_FILES['image']['tmp_name'];
-            $file_type = $_FILES['image']['type'];
             $file_ext=strtolower(end(explode('.',$_FILES['image']['name'])));
 
-            $expensions= array("jpeg","jpg","png");
+            $extensions= array("jpeg","jpg","png");
 
-            if(in_array($file_ext,$expensions)=== false){
-                $errors[]="extension not allowed, please choose a JPEG or PNG file.";
+            $title = $_POST['title'];
+            $desc = $_POST['desc'];
+            $galleryid = 2;
+
+            if(in_array($file_ext,$extensions)=== false){
+                $error = "extension not allowed, please choose a JPEG or PNG file.";
+            } else if($file_size > 8388608) {
+                $error = "File size must be less than 8 MB";
+            } else {
+                $error = "true";
             }
 
-            if($file_size > 2097152) {
-                $errors[]='File size must be excately 2 MB';
-            }
+            if($error == "true") {
 
-            if(empty($errors)==true) {
                 $gallery = new galleryController();
                 move_uploaded_file($file_tmp,"data/".$file_name);
+
+                $query = "insert into picture (gallery_id, filename, name, description) values (?, ?, ?, ?);";
+
+                $statement = connectionhandler::connect()->prepare($query);
+                $statement->bind_param('ssss', $galleryid, $file_name, $title, $desc);
+
+                if (!$statement->execute()) {
+                    throw new Exception($statement->error);
+                } else {
+                    header('Location: /gallery');
+                }
                 if (file_exists('data/$file_name') == false ) {
                     $gallery->createThumbnail($file_name);
                 }
+
             } else {
-                print_r($errors);
+                echo '<p>$error</p>';
             }
             header('Location: /gallery');
         }
+
+
+    }
+    public function deletepicture() {
+
     }
 }
 ?>

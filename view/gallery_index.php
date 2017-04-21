@@ -1,6 +1,6 @@
 <?php
-
-
+require_once '../lib/connectionhandler.php';
+connectionhandler::connect();
 ?>
 <html>
 
@@ -19,6 +19,21 @@ if ( file_exists( $dir ) == false ) {
     $dir_contents = scandir( $dir );
 
     foreach ( $dir_contents as $file ) {
+
+        $query = "select name, description from picture where filename = ?";
+        $statement = connectionhandler::connect()->prepare($query);
+        $statement->bind_param('s', $file);
+        $statement->execute();
+
+        $result = $statement->get_result();
+        $details = $result->fetch_object();
+
+        if (empty($details))
+            continue;
+
+        $title = $details->name;
+        $desc = $details->description;
+
         $file_type = strtolower( end( explode('.', $file ) ) );
         if ( ($file !== '.') && ($file !== '..') && (in_array( $file_type, $file_display)) ) {
             echo '<div class="col-md-3">';
@@ -26,18 +41,22 @@ if ( file_exists( $dir ) == false ) {
             echo '<a data-fancybox="gallery" href="data/'.$file.'">';
             echo '<img src="'. $dir . '/' . $file.'" alt="', $file , '" />';
             echo '</a>';
-            echo '<h3>Image Title</h3>';
-            echo '<p>The caption lololololol.</p>';
+            echo '<h4>' . $title . '</h4>';
+            echo '<p>' . $desc . '</p>';
             echo '</div>';
             echo '</div>';
-            // TODO Diashow
         }
+
     }
 }
 ?>
 
 <form action = "/gallery/upload" method = "POST" enctype = "multipart/form-data">
+    <label class="btn btn-default btn-file">
     <input type = "file" name = "image" />
+    </label>
+    <input type = "text" name = "title" required />
+    <textarea name = "desc" required></textarea>
     <input type = "submit"/>
 
 </form>
