@@ -46,7 +46,7 @@ class galleryController
             $file_tmp = $_FILES['image']['tmp_name'];
             $file_ext=strtolower(end(explode('.',$_FILES['image']['name'])));
 
-            $extensions= array("jpeg","jpg","png");
+            $expensions= array("jpeg","jpg","png", "gif");
 
             $title = $_POST['title'];
             $desc = $_POST['desc'];
