@@ -52,8 +52,8 @@ class pictureController
 
             $extension= array("jpeg","jpg","png", "gif");
 
-            $title = $_POST['title'];
-            $desc = $_POST['desc'];
+            $title = htmlentities($_POST['title']);
+            $desc = htmlentities($_POST['desc']);
             $gallery_id = 2;
             if(!empty($_SESSION['id'])) $gallery_id = $_SESSION['id'];
 

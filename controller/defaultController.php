@@ -36,7 +36,7 @@ class DefaultController{
 
         if (isset($_POST['gal'])){
             $user_id = $_SESSION['user']->id;
-            $name = $_POST['name'];
+            $name = htmlentities($_POST['name']);
             $desc = $_POST['desc'];
 
             $query = "insert into gallery (user_id, name, description) values (?, ?, ?)";
